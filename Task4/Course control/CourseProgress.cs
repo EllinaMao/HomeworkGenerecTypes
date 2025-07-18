@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task4.Interfaces;
+
 /*
 Задание 4
 Разработайте систему управления учебными курсами и студентами. В системе необходимо:
@@ -15,9 +17,11 @@ CourseProgress — класс, отражающий прогресс студе�
 Добавления курса к студенту и обновления его прогресса.
 Поиска и фильтрации студентов по различным критериям (например, по группе, статусу прогресса в курсе, текущему баллу).
 Сортировки студентов в зависимости от их успеваемости.*/
+
+
 namespace Task4
 {
-    internal class CourseProgress: ICourseProgress
+    public class CourseProgress: ICourseProgress
     {
         public string Name { get; private set; }
         public Topics? CurrentTopic { get; set; }
@@ -28,6 +32,7 @@ namespace Task4
         {
             Name = name;
             CurrentTopic = currentTopic ?? null;
+            SubscribeToTopic(CurrentTopic);
             CompletedTopics = completedTopics ?? new List<Topics>();
             UpdateCurrentScore();
         }
@@ -45,8 +50,13 @@ namespace Task4
 
         public override string ToString()
         {
-            return $"Course: {Name}, Current Score: {CurrentScore}, Current Topic: {CurrentTopic?.Name}, Completed Topics: {string.Join(", ", CompletedTopics.Select(t => t.Name))}";
+            string completed = CompletedTopics.Count > 0
+                ? string.Join(", ", CompletedTopics.Select(t => t.Name))
+                : "Нет";
+
+            return $"Курс: {Name}, Текущий балл: {CurrentScore}, Текущая тема: {CurrentTopic?.Name ?? "Нет"}, Завершённые темы: {completed}";
         }
+
 
         public void UpdateCurrentScore()
         {
@@ -80,7 +90,6 @@ namespace Task4
                 topic.OnMarksUpdated -= OnTopicCompleted;
                 CompletedTopics.Add(topic);
                 CurrentTopic = null;
-                //UpdateCurrentScore();
             }
             else
             {
@@ -95,8 +104,6 @@ namespace Task4
             UnsubscribeFromTopic(CurrentTopic);
             CurrentTopic = topic;
             SubscribeToTopic(CurrentTopic);
-
-            //UpdateCurrentScore(); // пересчитываем на всякий случай
         }
 
         private void SubscribeToTopic(Topics? topic)
@@ -114,7 +121,7 @@ namespace Task4
         }
 
 
-
+        
 
 
 

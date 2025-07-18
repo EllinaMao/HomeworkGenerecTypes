@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task4.Interfaces;
 
 namespace Task4
 {
@@ -32,7 +33,7 @@ namespace Task4
             Teacher = "Default Teacher";
             IsCompleted = false;
         }
-        public Topics(string name, string teacher, List<int>? marks = null, int? examMark = null)
+        public Topics(string name, string teacher, List<int>? marks = null)
         {
             Name = name;
             Teacher = teacher;
@@ -46,11 +47,20 @@ namespace Task4
 
         public void AddMark(int mark)
         {
-            if (IsCompleted) return;
-            if (mark < 0 || mark > 12)
+            try
             {
+
+            if (IsCompleted) return;
+            if (mark < 1 || mark >= 12)
+            {
+                throw new ArgumentOutOfRangeException("Оценка не может быть выше 12 или ниже 1");
+            }
                 Marks.Add(mark);
                 OnMarksUpdated?.Invoke(this, EventArgs.Empty);
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine(ex.Message );
             }
         }
 
