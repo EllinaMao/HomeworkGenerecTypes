@@ -149,12 +149,40 @@ CourseProgress — класс, отражающий прогресс студе�
             Console.WriteLine(Concatenate());
         }
 
+        public IEnumerable<Student> FindByGroup(string group)
+        {
+            return studentCourses.Keys.Where(s => s.Group == group);
+        }
 
+        public IEnumerable<Student> FindByCourse(string courseName)
+        {
+            return studentCourses
+                .Where(kvp => kvp.Value.Any(cp => cp.Name == courseName))
+                .Select(kvp => kvp.Key);
+        }
 
+        public IEnumerable<Student> FindByScore(double minScore)
+        {
+            return studentCourses
+                .Where(kvp => kvp.Value.Any(cp => cp.CurrentScore >= minScore))
+                .Select(kvp => kvp.Key);
+        }
 
-
-
-
+        public IEnumerable<Student> FindByCompletedTopics(int minCompleted)
+        {
+            return studentCourses
+                .Where(kvp => kvp.Value.Any(cp => cp.CompletedTopics.Count >= minCompleted))
+                .Select(kvp => kvp.Key);
+        }
+        public IEnumerable<(Student student, double avgScore)> SortByPerformance()
+        {
+            return studentCourses
+                .Select(kvp => (
+                    kvp.Key,
+                    kvp.Value.Count > 0 ? kvp.Value.Average(cp => cp.CurrentScore) : 0
+                ))
+                .OrderByDescending(x => x.Item2);
+        }
 
     }
 }

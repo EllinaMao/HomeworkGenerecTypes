@@ -33,7 +33,7 @@ namespace Task4
             Teacher = "Default Teacher";
             IsCompleted = false;
         }
-        public Topics(string name, string teacher, List<int>? marks = null)
+        public Topics(string name, string teacher, List<int>? marks = null, bool v = false)
         {
             Name = name;
             Teacher = teacher;
