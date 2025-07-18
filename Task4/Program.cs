@@ -1,4 +1,6 @@
-﻿namespace Task4
+﻿using System.Runtime.CompilerServices;
+
+namespace Task4
 {
 /*
 Задание 4
@@ -16,7 +18,46 @@ CourseProgress — класс, отражающий прогресс студе�
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+             Random random = new Random();
+            GroupCourses cource = new GroupCourses();
+            var studentNata = new Student("Natalia", 4324231, "10B");
+            cource.AddStudent(studentNata, new CourseProgress("Basic"));
+            cource.AddStudent(
+                new Student("Alia", 123435, "12B"),
+                new CourseProgress(
+                    "Basic",
+                    new Topics("Cpp", "Maria Petrova", new List<int> { 12, 5, 6, 7 })
+                )
+            );
+            cource.AddStudent(
+                new Student("Sasha", 321312, "12B"),
+                new CourseProgress(
+                    "Basic",
+                    new Topics("Cpp", "Maria Petrova", new List<int> { 12, 10, 10, 10 })
+                )
+            );
+            cource.AddTopicToStudentCourse(studentNata, "Basic", new Topics("Cpp", "Maria Petrova"));
+
+
+            for (int i = 0; i < 4; i++)
+            {
+                cource.AddStudentMark(studentNata,"Basic" ,random.Next(1, 13));
+
+            }
+            Console.WriteLine(cource.ToString());
+
+            // Поиск студентов по группе "12B"
+            var studentsIn12B = cource.FindByGroup("12B");
+            Console.WriteLine("Студенты группы 12B:");
+            foreach (var s in studentsIn12B) { 
+                Console.WriteLine(s.FullName);
+            }
+            // Сортировка по успеваемости
+            var sorted = cource.SortByPerformance();
+            Console.WriteLine("Студенты по успеваемости:");
+            foreach (var (student, avgScore) in sorted) { 
+                Console.WriteLine($"{student.FullName}: {avgScore}");
         }
+    }
     }
 }
